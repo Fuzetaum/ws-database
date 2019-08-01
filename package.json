@@ -1,0 +1,34 @@
+{
+  "name": "@ricardofuzeto/ws-database",
+  "description": "Web service database library",
+  "version": "0.0.1-1",
+  "author": "Ricardo Fuzeto",
+  "contributors": [
+    "Ricardo Fuzeto <ricardofuzeto@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "web",
+    "service",
+    "database",
+    "firebase"
+  ],
+  "main": "index.js",
+  "dependencies": {
+    "@ricardofuzeto/ws-core": "0.0.1-4"
+  },
+  "scripts": {
+    "start": "nodemon test/main.js"
+  },
+  "devDependencies": {
+    "@ricardofuzeto/ws-store": "0.0.1-1",
+    "firebase": "6.3.3",
+    "moment": "2.24.0",
+    "nodemon": "1.19.1"
+  },
+  "peerDependencies": {
+    "@ricardofuzeto/ws-store": "0.0.x",
+    "firebase": "6.x",
+    "moment": "2.x"
+  }
+}
