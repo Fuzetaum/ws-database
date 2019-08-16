@@ -5,20 +5,29 @@ require('firebase/database');
 const get = async (object) =>
   (await firebaseApp.database().ref(object).once('value')).val();
 
-// Creates new object into database (overwrite-safe)
-const create = async (object, data) => {};
+const create = (object, data) => {
+  get(object).then(previous => {
+    if (!previous) {
+      firebaseApp.database().ref(object).set(data)
+        .catch((error) => {
+          log.ERROR(`Error when writing data into Firebase document location ${object}:`);
+          log.ERROR(error);
+        });
+    }
+  });
+};
 
-// Creates new object into database (not overwrite-safe)
-const set = async (object, data) => {
+const deleteObject = (object) => set(object, null);
+
+const set = (object, data) => {
   firebaseApp.database().ref(object).set(data)
     .catch((error) => {
       log.ERROR(`Error when writing data into Firebase document location ${object}:`);
-      console.error(error);
+      log.ERROR(error);
     });
 };
 
-// Merges old data with provided
-const update = async (object, data) => {};
+const update = (object, data) => firebaseApp.database().ref(object).update(data);
 
 const firebase = () => {
   const { properties } = require('@ricardofuzeto/ws-core').context;
@@ -38,6 +47,7 @@ const firebase = () => {
 
   return {
     create,
+    deleteObject,
     get,
     set,
     update,
