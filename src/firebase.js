@@ -29,13 +29,13 @@ const set = (object, data) => {
 
 const update = (object, data) => firebaseApp.database().ref(object).update(data);
 
-const firebase = () => {
+const firebase = async () => {
   const { properties } = require('@ricardofuzeto/ws-core').context;
   const { configuration } = properties.get('database');
 
   if (!configuration) {
     log.ERROR_FATAL('Could not initialize Firebase connection: property "configuration" does not exist');
-    log.ERROR_FATAL('Please, check your "database" properties in ".env" file');
+    log.ERROR_FATAL('Please, check your "database" properties in "application.json" file');
     process.exit(1);
   }
 

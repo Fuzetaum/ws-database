@@ -15,6 +15,4 @@ if (!dbProperties.type || !DATABASES.includes(dbProperties.type)) {
   log.ERROR_FATAL(`Supported values: ${DATABASES.join(',')}`);
 }
 
-module.exports = {
-  ...database[dbProperties.type](),
-};
+module.exports = database[dbProperties.type]();

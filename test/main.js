@@ -1,16 +1,27 @@
-const { create, deleteObject, get, set, update } = require('../index');
+const { properties } = require('@ricardofuzeto/ws-core').context;
+const { type } = properties.get('database');
+const wsDatabase = require('../index');
 
-// create('user/zedascove', { this: 'that' });
-// get('user/zedascove').then(value => console.log(value));
+(async () => {
+  const db = await wsDatabase;
 
-// create('user/zedascove', { this: 'something else' });
-// get('user/zedascove').then(value => console.log(value));
-
-// set('user/teste', { this: 'something else', that: 'another value' });
-// get('user/teste').then(value => console.log(value));
-
-// update('user/teste', { that: 'simple value' });
-// get('user/teste').then(value => console.log(value));
-
-// deleteObject('user/teste');
-// get('user/teste').then(value => console.log(value));
+  switch (type) {
+    case 'firebase':
+      db.create('user/zedascove', { this: 'that' });
+      console.log(await db.get('user/zedascove'));
+      
+      db.create('user/zedascove', { this: 'something else' });
+      console.log(await db.get('user/zedascove'));
+      
+      db.set('user/teste', { this: 'something else', that: 'another value' });
+      console.log(await db.get('user/teste'));
+      
+      db.update('user/teste', { that: 'simple value' });
+      console.log(await db.get('user/teste'));
+      
+      db.deleteObject('user/teste');
+      console.log(await db.get('user/teste'));
+    case 'mongodb':
+      db.get('user/zedascove', (_, data) => console.log(data));
+  }
+})();

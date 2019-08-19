@@ -56,9 +56,17 @@ const set = (document, object, cb) => {};
 
 const update = (document, object, cb) => {};
 
-const mongodb = () => {
-  connect();
+const mongodb = async () => {
+  const { properties } = require('@ricardofuzeto/ws-core').context;
+  const { configuration } = properties.get('database');
 
+  if (!configuration) {
+    log.ERROR_FATAL('Could not initialize MongoDB connection: property "configuration" does not exist');
+    log.ERROR_FATAL('Please, check your "database" properties in "application.json" file');
+    process.exit(1);
+  }
+
+  await connect();
   return {
     create,
     deleteObject,

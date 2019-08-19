@@ -1,7 +1,7 @@
 {
   "name": "@ricardofuzeto/ws-database",
   "description": "Web service database library",
-  "version": "0.0.1-1",
+  "version": "0.0.1-2",
   "author": "Ricardo Fuzeto",
   "contributors": [
     "Ricardo Fuzeto <ricardofuzeto@gmail.com>"
@@ -18,12 +18,11 @@
     "@ricardofuzeto/ws-core": "0.0.1-4"
   },
   "scripts": {
-    "start": "nodemon test/main.js"
+    "start": "node test/main.js"
   },
   "devDependencies": {
     "@ricardofuzeto/ws-store": "0.0.1-1",
-    "moment": "2.24.0",
-    "nodemon": "1.19.1"
+    "moment": "2.24.0"
   },
   "peerDependencies": {
     "@ricardofuzeto/ws-store": "0.0.x",
