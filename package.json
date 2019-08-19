@@ -22,13 +22,15 @@
   },
   "devDependencies": {
     "@ricardofuzeto/ws-store": "0.0.1-1",
-    "firebase": "6.3.3",
     "moment": "2.24.0",
     "nodemon": "1.19.1"
   },
   "peerDependencies": {
     "@ricardofuzeto/ws-store": "0.0.x",
-    "firebase": "6.x",
     "moment": "2.x"
+  },
+  "optionalDependencies": {
+    "firebase": "6.3.3",
+    "mongodb": "3.3.0"
   }
 }
