@@ -42,13 +42,36 @@ const connect = () => new Promise((resolve) => {
   setTimeout(checkConnection, 100);
 });
 
-const create = (document, object, cb) => {};
+const create = (document, searchParams, object, cb) => {
+  db.collection(document).findOne(searchParams, (error, result) => {
+    if (error) {
+      log.ERROR(`Error when creating document node: ${error}`);
+      throw error;
+    }
+    if (!result) {
+      log.LOG(`Creating new node in document "${document}": ${object.toString()}`);
+      db.collection(document).insertOne(object, (createError, result) => {
+        if (createError) {
+          log.ERROR(`Error when creating document node: ${error}`);
+          throw createError;
+        } else {
+          log.LOG(`Document "${document}" node created successfully`);
+          cb(createError, result);
+        }
+      });
+    }
+  });
+};
 
 const deleteObject = (document, object, cb) => {};
 
-const get = (document, cb) => {
-  db.collection(document).find({}).toArray((err, result) => {
-    cb(err, result);
+const get = (document, searchParams, cb) => {
+  db.collection(document).findOne(searchParams, (error, result) => {
+    if (error) {
+      log.ERROR(`Error when searching for document "${document}": ${error}`);
+      throw error;
+    }
+    cb(error, result);
   });
 };
 

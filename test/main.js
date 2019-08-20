@@ -22,6 +22,7 @@ const wsDatabase = require('../index');
       db.deleteObject('user/teste');
       console.log(await db.get('user/teste'));
     case 'mongodb':
-      db.get('user/zedascove', (_, data) => console.log(data));
+      db.create('user', { this: 'that' }, { this: 'that' }, () => {});
+      db.get('user', (_, data) => console.log(data));
   }
 })();
