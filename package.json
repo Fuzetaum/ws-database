@@ -11,7 +11,8 @@
     "web",
     "service",
     "database",
-    "firebase"
+    "firebase",
+    "mongodb"
   ],
   "main": "index.js",
   "dependencies": {
