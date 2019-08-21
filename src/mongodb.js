@@ -67,19 +67,19 @@ const create = (collection, query, object, cb) => {
 };
 
 const deleteObject = (collection, query, cb) => {
-  db.collection(collection).deleteOne(query, (error, result) => {
+  db.collection(collection).deleteMany(query, (error, result) => {
     if (error) {
       log.ERROR(`Error when deleting collection "${collection}" object ${JSON.stringify(query)}`);
       log.ERROR(error);
       throw error;
     }
-    log.LOG(`Object deleted: collection "${collection}", object ${JSON.stringify(query)}`);
+    log.LOG(`${result.result.n} ${result.result.n > 1 ? 'objects' : 'object'} deleted: collection "${collection}", object ${JSON.stringify(query)}`);
     cb(error, result);
   });
 };
 
 const get = (collection, query, cb) => {
-  db.collection(collection).findOne(query, (error, result) => {
+  db.collection(collection).find(query).toArray((error, result) => {
     if (error) {
       log.ERROR(`Error when searching collection "${collection}": ${error}`);
       throw error;
