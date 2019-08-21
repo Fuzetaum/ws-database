@@ -42,47 +42,78 @@ const connect = () => new Promise((resolve) => {
   setTimeout(checkConnection, 100);
 });
 
-const create = (document, searchParams, object, cb) => {
-  db.collection(document).findOne(searchParams, (error, result) => {
+const create = (collection, query, object, cb) => {
+  db.collection(collection).findOne(query, (error, result) => {
     if (error) {
-      log.ERROR(`Error when creating document node: ${error}`);
+      log.ERROR(`Error when creating new object: ${error}`);
       throw error;
     }
     if (!result) {
-      log.LOG(`Creating new node in document "${document}": ${object.toString()}`);
-      db.collection(document).insertOne(object, (createError, result) => {
+      db.collection(collection).insertOne(object, (createError, result) => {
         if (createError) {
-          log.ERROR(`Error when creating document node: ${error}`);
+          log.ERROR(`Error when creating new object in collection: ${error}`);
           throw createError;
         } else {
-          log.LOG(`Document "${document}" node created successfully`);
+          log.LOG(`Collection "${collection}" new object ${JSON.stringify(object)} created successfully`);
           cb(createError, result);
         }
       });
+    } else {
+      log.WARNING(`Tried to create object ${JSON.stringify(object)} into collection "${collection}", but entity already exists`);
+      log.WARNING(`Skipped object creation`);
+      cb(error, result);
     }
   });
 };
 
-const deleteObject = (document, object, cb) => {};
-
-const get = (document, searchParams, cb) => {
-  db.collection(document).findOne(searchParams, (error, result) => {
+const deleteObject = (collection, query, cb) => {
+  db.collection(collection).deleteOne(query, (error, result) => {
     if (error) {
-      log.ERROR(`Error when searching for document "${document}": ${error}`);
+      log.ERROR(`Error when deleting collection "${collection}" object ${JSON.stringify(query)}`);
+      log.ERROR(error);
+      throw error;
+    }
+    log.LOG(`Object deleted: collection "${collection}", object ${JSON.stringify(query)}`);
+    cb(error, result);
+  });
+};
+
+const get = (collection, query, cb) => {
+  db.collection(collection).findOne(query, (error, result) => {
+    if (error) {
+      log.ERROR(`Error when searching collection "${collection}": ${error}`);
       throw error;
     }
     cb(error, result);
   });
 };
 
-const set = (document, object, cb) => {};
+const set = (collection, object, cb) => {
+  db.collection(collection).insertOne(object, (createError, result) => {
+    if (createError) {
+      log.ERROR(`Error when setting object ${JSON.stringify(object)} in collection "${collection}"`);
+      log.ERROR(error);
+      throw createError;
+    } else {
+      log.LOG(`Collection "${collection}" object setted successfully`);
+      cb(createError, result);
+    }
+  });
+};
 
-const update = (document, object, cb) => {};
+const update = (collection, query, object, cb) => {
+  db.collection(collection).updateOne(query, { $set: object }, (error, result) => {
+    if (error) {
+      log.ERROR(`Error when updating collection "${collection}" object ${JSON.stringify(query)}`);
+      log.ERROR(error);
+      throw error;
+    }
+    log.LOG(`Object updated: collection "${collection}", object ${JSON.stringify(query)}`);
+    cb(error, result);
+  });
+};
 
 const mongodb = async () => {
-  const { properties } = require('@ricardofuzeto/ws-core').context;
-  const { configuration } = properties.get('database');
-
   if (!configuration) {
     log.ERROR_FATAL('Could not initialize MongoDB connection: property "configuration" does not exist');
     log.ERROR_FATAL('Please, check your "database" properties in "application.json" file');
